@@ -2616,11 +2616,16 @@ __webpack_require__.r(__webpack_exports__);
       filters: [],
       project: "worldswithin",
       sort: "asc",
-      method_name: "rarity",
+      method_name: "serial",
       stats: [],
       worldsWithinData: [],
       pages: 1,
-      page_number: 1
+      page_number: 1,
+      priceOnly: false,
+      minPrice: "",
+      maxPrice: "",
+      minRank: "",
+      maxRank: ""
     };
   },
   mounted: function mounted() {
@@ -2631,7 +2636,7 @@ __webpack_require__.r(__webpack_exports__);
       sort: this.sort,
       method_name: this.method_name,
       page: this.page_number,
-      priceOnly: false,
+      priceOnly: this.priceOnly,
       filters: this.filters,
       minPrice: 0,
       maxPrice: 0,
@@ -2654,7 +2659,7 @@ __webpack_require__.r(__webpack_exports__);
         sort: this.sort,
         method_name: this.method_name,
         page: this.page_number,
-        priceOnly: false,
+        priceOnly: this.priceOnly,
         filters: this.filters,
         minPrice: 0,
         maxPrice: 0,
@@ -2668,8 +2673,28 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    pageChange: function pageChange() {
-      console.log(this.page_number);
+    methodChangeGetData: function methodChangeGetData() {
+      var _this3 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/get-data', {
+        project: this.project,
+        sort: this.sort,
+        method_name: this.method_name,
+        page: 1,
+        priceOnly: this.priceOnly,
+        filters: this.filters,
+        minPrice: this.minPrice,
+        maxPrice: this.maxPrice,
+        minRank: 0,
+        maxRank: 0
+      }).then(function (response) {
+        _this3.worldsWithinData = response.data.stats;
+        _this3.pages = response.data.params.maxPages;
+        _this3.page_number = 1;
+        console.log(response.data.params.maxPages);
+      })["catch"](function (error) {
+        console.log(error);
+      });
     }
   }
 });
@@ -38276,9 +38301,256 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "container-fluid flex g-0 overflow100" }, [
-      _vm._m(0),
+      _c(
+        "div",
+        {
+          staticClass: "row g-0 overflow100",
+          staticStyle: { "padding-left": "0px!important" },
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "col-sm  order-xs-1 custombar ",
+              staticStyle: { top: "96px", height: "calc(100% - 96px)" },
+              attrs: { id: "sidenav" },
+            },
+            [
+              _vm._m(0),
+              _vm._v(" "),
+              _vm._m(1),
+              _vm._v(" "),
+              _c("div", { staticClass: "search" }, [
+                _c("span", { staticClass: "src_txt" }, [
+                  _vm._v("\n    Search By Serial:\n"),
+                ]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c("input", {
+                  attrs: { type: "text", placeholder: "search", size: "10" },
+                }),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c("button", { staticClass: "go" }, [_vm._v("Go")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "method" }, [
+                  _vm._v("\n                        Sort: "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.method_name,
+                          expression: "method_name",
+                        },
+                      ],
+                      attrs: { name: "method" },
+                      on: {
+                        change: [
+                          function ($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function (o) {
+                                return o.selected
+                              })
+                              .map(function (o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.method_name = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          },
+                          _vm.methodChangeGetData,
+                        ],
+                      },
+                    },
+                    [
+                      _c(
+                        "option",
+                        { attrs: { value: "serial", selected: "" } },
+                        [_vm._v("Serial")]
+                      ),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "price" } }, [
+                        _vm._v("Price"),
+                      ]),
+                    ]
+                  ),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.sort,
+                        expression: "sort",
+                      },
+                    ],
+                    attrs: { name: "sort", id: "sort" },
+                    on: {
+                      change: [
+                        function ($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function (o) {
+                              return o.selected
+                            })
+                            .map(function (o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.sort = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        },
+                        _vm.methodChangeGetData,
+                      ],
+                    },
+                  },
+                  [
+                    _c("option", { attrs: { value: "asc" } }, [_vm._v("Asc")]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "desc" } }, [_vm._v("Dsc")]),
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "check" }, [
+                  _vm._v("For Sale Only: "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.priceOnly,
+                        expression: "priceOnly",
+                      },
+                    ],
+                    attrs: { type: "checkbox" },
+                    domProps: {
+                      checked: Array.isArray(_vm.priceOnly)
+                        ? _vm._i(_vm.priceOnly, null) > -1
+                        : _vm.priceOnly,
+                    },
+                    on: {
+                      change: [
+                        function ($event) {
+                          var $$a = _vm.priceOnly,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = null,
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 && (_vm.priceOnly = $$a.concat([$$v]))
+                            } else {
+                              $$i > -1 &&
+                                (_vm.priceOnly = $$a
+                                  .slice(0, $$i)
+                                  .concat($$a.slice($$i + 1)))
+                            }
+                          } else {
+                            _vm.priceOnly = $$c
+                          }
+                        },
+                        _vm.methodChangeGetData,
+                      ],
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticStyle: { "padding-bottom": "20px" } }, [
+                  _vm._v("\n                        Price Filter:"),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.minPrice,
+                        expression: "minPrice",
+                      },
+                    ],
+                    attrs: {
+                      type: "text",
+                      placeholder: "min",
+                      id: "lowprice",
+                      size: "4",
+                    },
+                    domProps: { value: _vm.minPrice },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.minPrice = $event.target.value
+                      },
+                    },
+                  }),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.maxPrice,
+                        expression: "maxPrice",
+                      },
+                    ],
+                    staticClass: "mt-2",
+                    attrs: {
+                      type: "text",
+                      placeholder: "max",
+                      id: "highprice",
+                      size: "4",
+                    },
+                    domProps: { value: _vm.maxPrice },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.maxPrice = $event.target.value
+                      },
+                    },
+                  }),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "go",
+                      on: { click: _vm.methodChangeGetData },
+                    },
+                    [_vm._v("Go")]
+                  ),
+                ]),
+                _vm._v(" "),
+                _c("div", { attrs: { id: "results" } }, [
+                  _vm._v("Results Found: 12582"),
+                ]),
+                _vm._v(" "),
+                _c("hr"),
+                _vm._v(" "),
+                _c("span", { staticClass: "traits" }, [_vm._v("Traits")]),
+                _vm._v(" "),
+                _vm._m(2),
+                _vm._v(" "),
+                _vm._m(3),
+              ]),
+            ]
+          ),
+        ]
+      ),
       _vm._v(" "),
-      _vm._m(1),
+      _vm._m(4),
       _vm._v(" "),
       _c("button", {
         staticClass: "btn btn-primary",
@@ -38290,7 +38562,7 @@ var render = function () {
         },
       }),
       _vm._v(" "),
-      _vm._m(2),
+      _vm._m(5),
       _vm._v(" "),
       _c(
         "div",
@@ -38317,7 +38589,7 @@ var render = function () {
                       ),
                     ]),
                     _vm._v(" "),
-                    _vm._m(3, true),
+                    _vm._m(6, true),
                     _vm._v(" "),
                     _c("div", { staticClass: "product_num" }, [
                       _vm._v(
@@ -38387,432 +38659,258 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "row g-0 overflow100",
-        staticStyle: { "padding-left": "0px!important" },
-      },
-      [
-        _c(
-          "div",
-          {
-            staticClass: "col-sm  order-xs-1 custombar ",
-            staticStyle: { top: "96px", height: "calc(100% - 96px)" },
-            attrs: { id: "sidenav" },
-          },
-          [
-            _c("div", { staticStyle: { padding: "0px 15px 0px 15px" } }, [
-              _c("span", { staticStyle: { "font-size": "1.5rem" } }, [
-                _vm._v("Worlds Within"),
-              ]),
-              _c("br"),
-              _vm._v("\n\n\n\n\n                    Circulation: 12582"),
-              _c("br"),
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "side_box_img" }, [
-              _c("img", { attrs: { src: "img/worldswithin.png" } }),
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "search" }, [
-              _c("span", { staticClass: "src_txt" }, [
-                _vm._v("\n    Search By Serial:\n"),
-              ]),
-              _vm._v(" "),
-              _c("br"),
-              _vm._v(" "),
-              _c("input", {
-                attrs: { type: "text", placeholder: "search", size: "10" },
-              }),
-              _vm._v(" "),
-              _c("br"),
-              _vm._v(" "),
-              _c("button", { staticClass: "go" }, [_vm._v("Go")]),
-              _vm._v(" "),
-              _c("div", { staticClass: "method" }, [
-                _vm._v("\n                        Sort: "),
-                _c("select", { attrs: { name: "method" } }, [
-                  _c("option", { attrs: { value: "name" } }, [
-                    _vm._v("Serial"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "price" } }, [
-                    _vm._v("Price"),
-                  ]),
-                ]),
-              ]),
-              _vm._v(" "),
-              _c("select", { attrs: { name: "sort", id: "sort" } }, [
-                _c("option", { attrs: { value: "ASC" } }, [_vm._v("Asc")]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "DSC" } }, [_vm._v("Dsc")]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "check" }, [
-                _vm._v("For Sale Only: "),
-                _c("input", { attrs: { type: "checkbox" } }),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticStyle: { "padding-bottom": "20px" } }, [
-                _vm._v("\n                        Price Filter:"),
-                _c("br"),
-                _vm._v(" "),
-                _c("input", {
-                  attrs: {
-                    type: "text",
-                    placeholder: "min",
-                    id: "lowprice",
-                    size: "4",
-                  },
-                }),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "mt-2",
-                  attrs: {
-                    type: "text",
-                    placeholder: "max",
-                    id: "highprice",
-                    size: "4",
-                  },
-                }),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
-                _c("button", { staticClass: "go" }, [_vm._v("Go")]),
-              ]),
-              _vm._v(" "),
-              _c("div", { attrs: { id: "results" } }, [
-                _vm._v("Results Found: 12582"),
-              ]),
-              _vm._v(" "),
-              _c("hr"),
-              _vm._v(" "),
-              _c("span", { staticClass: "traits" }, [_vm._v("Traits")]),
-              _vm._v(" "),
-              _c(
-                "button",
-                { attrs: { onclick: "colaps()", id: "traitshide" } },
-                [
-                  _vm._v("Traits "),
-                  _c("i", {
-                    staticClass: "fas fa-angle-down",
-                    attrs: { id: "angle" },
-                  }),
-                ]
-              ),
-              _vm._v(" "),
-              _c("div", { attrs: { id: "traitsxyzhahaha" } }, [
-                _vm._v("\n\n\n                        Worldtype"),
-                _c("br"),
-                _vm._v(" "),
-                _c("select", { staticClass: "worldType" }, [
-                  _c("option", { attrs: { value: "x" } }, [_vm._v("Any")]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Outer World" } }, [
-                    _vm._v("Outer World [6242]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Inner World" } }, [
-                    _vm._v("Inner World [6340]"),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v("\n\n                        Fog"),
-                _c("br"),
-                _vm._v(" "),
-                _c("select", { staticClass: "worldType" }, [
-                  _c("option", { attrs: { value: "x" } }, [_vm._v("Any")]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "0" } }, [_vm._v("0 [1223]")]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "0.5" } }, [
-                    _vm._v("0.5 [1231]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "0.75" } }, [
-                    _vm._v("0.75 [1294]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "0.25" } }, [
-                    _vm._v("0.25 [1327]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "1" } }, [_vm._v("1 [7507]")]),
-                ]),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v("\n\n                        Traits"),
-                _c("br"),
-                _vm._v(" "),
-                _c("select", { staticClass: "worldType" }, [
-                  _c("option", { attrs: { value: "x" } }, [_vm._v("Any")]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "weirdface" } }, [
-                    _vm._v("weirdface [245]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "face6d" } }, [
-                    _vm._v("face6d [246]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "trees2d" } }, [
-                    _vm._v("trees2d [251]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "face4d" } }, [
-                    _vm._v("face4d [261]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "torii_weird" } }, [
-                    _vm._v("torii_weird [262]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "face3d" } }, [
-                    _vm._v("face3d [262]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "trees1d" } }, [
-                    _vm._v("trees1d [263]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "face8d" } }, [
-                    _vm._v("face8d [264]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "face10d" } }, [
-                    _vm._v("face10d [268]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "face5d" } }, [
-                    _vm._v("face5d [269]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "face1d" } }, [
-                    _vm._v("face1d [277]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "face2d" } }, [
-                    _vm._v("face2d [291]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "face7d" } }, [
-                    _vm._v("face7d [293]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "pyramid_face3d" } }, [
-                    _vm._v("pyramid_face3d [297]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "pyramid_weird" } }, [
-                    _vm._v("pyramid_weird [312]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_K" } }, [
-                    _vm._v("Type_K [737]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_H" } }, [
-                    _vm._v("Type_H [739]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_G" } }, [
-                    _vm._v("Type_G [742]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_N" } }, [
-                    _vm._v("Type_N [756]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_P" } }, [
-                    _vm._v("Type_P [766]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_J" } }, [
-                    _vm._v("Type_J [772]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_M" } }, [
-                    _vm._v("Type_M [778]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_E" } }, [
-                    _vm._v("Type_E [783]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_C" } }, [
-                    _vm._v("Type_C [785]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_F" } }, [
-                    _vm._v("Type_F [791]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_B" } }, [
-                    _vm._v("Type_B [802]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_D" } }, [
-                    _vm._v("Type_D [808]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_I" } }, [
-                    _vm._v("Type_I [812]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_A" } }, [
-                    _vm._v("Type_A [814]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_L" } }, [
-                    _vm._v("Type_L [843]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Type_O" } }, [
-                    _vm._v("Type_O [854]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "cubes" } }, [
-                    _vm._v("cubes [1019]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "pyramids" } }, [
-                    _vm._v("pyramids [1031]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "mushrooms" } }, [
-                    _vm._v("mushrooms [1041]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "towers" } }, [
-                    _vm._v("towers [1066]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "trees" } }, [
-                    _vm._v("trees [1070]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "torii" } }, [
-                    _vm._v("torii [1084]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "cylinders" } }, [
-                    _vm._v("cylinders [1091]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "apparatus" } }, [
-                    _vm._v("apparatus [1119]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Constant snow" } }, [
-                    _vm._v("Constant snow [2083]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Constant rain" } }, [
-                    _vm._v("Constant rain [2114]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Constant dust" } }, [
-                    _vm._v("Constant dust [2134]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "Seasonal Weather" } }, [
-                    _vm._v("Seasonal Weather [3108]"),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v("\n\n                        Terraintrait"),
-                _c("br"),
-                _vm._v(" "),
-                _c("select", { staticClass: "worldType" }, [
-                  _c("option", { attrs: { value: "x" } }, [_vm._v("Any")]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "noise" } }, [
-                    _vm._v("noise [2449]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "spikes" } }, [
-                    _vm._v("spikes [2481]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "canyon" } }, [
-                    _vm._v("canyon [2522]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "hills" } }, [
-                    _vm._v("hills [2559]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "flat" } }, [
-                    _vm._v("flat [2571]"),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v("\n\n                        Relics"),
-                _c("br"),
-                _vm._v(" "),
-                _c("select", { staticClass: "worldType" }, [
-                  _c("option", { attrs: { value: "x" } }, [_vm._v("Any")]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "top1" } }, [
-                    _vm._v("top1 [344]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "top2" } }, [
-                    _vm._v("top2 [347]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "windmill2" } }, [
-                    _vm._v("windmill2 [355]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "top3" } }, [
-                    _vm._v("top3 [356]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "windmill1" } }, [
-                    _vm._v("windmill1 [360]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "tower" } }, [
-                    _vm._v("tower [400]"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "None" } }, [
-                    _vm._v("None [10456]"),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v("\n\n                        Relicscount"),
-                _c("br"),
-                _vm._v(" "),
-                _c("select", { staticClass: "worldType" }, [
-                  _c("option", { attrs: { value: "x" } }, [_vm._v("Any")]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "2" } }, [_vm._v("2 [36]")]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "1" } }, [_vm._v("1 [2090]")]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "0" } }, [
-                    _vm._v("0 [10456]"),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
-                _c("button", { staticClass: "go" }, [_vm._v("Reset")]),
-              ]),
-            ]),
-          ]
-        ),
-      ]
-    )
+    return _c("div", { staticStyle: { padding: "0px 15px 0px 15px" } }, [
+      _c("span", { staticStyle: { "font-size": "1.5rem" } }, [
+        _vm._v("Worlds Within"),
+      ]),
+      _c("br"),
+      _vm._v("\n\n\n\n\n                    Circulation: 12582"),
+      _c("br"),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "side_box_img" }, [
+      _c("img", { attrs: { src: "img/worldswithin.png" } }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("button", { attrs: { onclick: "colaps()", id: "traitshide" } }, [
+      _vm._v("Traits "),
+      _c("i", { staticClass: "fas fa-angle-down", attrs: { id: "angle" } }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { attrs: { id: "traitsxyzhahaha" } }, [
+      _vm._v("\n\n\n                        Worldtype"),
+      _c("br"),
+      _vm._v(" "),
+      _c("select", { staticClass: "worldType" }, [
+        _c("option", { attrs: { value: "x" } }, [_vm._v("Any")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Outer World" } }, [
+          _vm._v("Outer World [6242]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Inner World" } }, [
+          _vm._v("Inner World [6340]"),
+        ]),
+      ]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v("\n\n                        Fog"),
+      _c("br"),
+      _vm._v(" "),
+      _c("select", { staticClass: "worldType" }, [
+        _c("option", { attrs: { value: "x" } }, [_vm._v("Any")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "0" } }, [_vm._v("0 [1223]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "0.5" } }, [_vm._v("0.5 [1231]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "0.75" } }, [_vm._v("0.75 [1294]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "0.25" } }, [_vm._v("0.25 [1327]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "1" } }, [_vm._v("1 [7507]")]),
+      ]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v("\n\n                        Traits"),
+      _c("br"),
+      _vm._v(" "),
+      _c("select", { staticClass: "worldType" }, [
+        _c("option", { attrs: { value: "x" } }, [_vm._v("Any")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "weirdface" } }, [
+          _vm._v("weirdface [245]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "face6d" } }, [_vm._v("face6d [246]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "trees2d" } }, [
+          _vm._v("trees2d [251]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "face4d" } }, [_vm._v("face4d [261]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "torii_weird" } }, [
+          _vm._v("torii_weird [262]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "face3d" } }, [_vm._v("face3d [262]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "trees1d" } }, [
+          _vm._v("trees1d [263]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "face8d" } }, [_vm._v("face8d [264]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "face10d" } }, [
+          _vm._v("face10d [268]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "face5d" } }, [_vm._v("face5d [269]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "face1d" } }, [_vm._v("face1d [277]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "face2d" } }, [_vm._v("face2d [291]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "face7d" } }, [_vm._v("face7d [293]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "pyramid_face3d" } }, [
+          _vm._v("pyramid_face3d [297]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "pyramid_weird" } }, [
+          _vm._v("pyramid_weird [312]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_K" } }, [_vm._v("Type_K [737]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_H" } }, [_vm._v("Type_H [739]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_G" } }, [_vm._v("Type_G [742]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_N" } }, [_vm._v("Type_N [756]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_P" } }, [_vm._v("Type_P [766]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_J" } }, [_vm._v("Type_J [772]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_M" } }, [_vm._v("Type_M [778]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_E" } }, [_vm._v("Type_E [783]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_C" } }, [_vm._v("Type_C [785]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_F" } }, [_vm._v("Type_F [791]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_B" } }, [_vm._v("Type_B [802]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_D" } }, [_vm._v("Type_D [808]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_I" } }, [_vm._v("Type_I [812]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_A" } }, [_vm._v("Type_A [814]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_L" } }, [_vm._v("Type_L [843]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Type_O" } }, [_vm._v("Type_O [854]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "cubes" } }, [_vm._v("cubes [1019]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "pyramids" } }, [
+          _vm._v("pyramids [1031]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "mushrooms" } }, [
+          _vm._v("mushrooms [1041]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "towers" } }, [_vm._v("towers [1066]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "trees" } }, [_vm._v("trees [1070]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "torii" } }, [_vm._v("torii [1084]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "cylinders" } }, [
+          _vm._v("cylinders [1091]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "apparatus" } }, [
+          _vm._v("apparatus [1119]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Constant snow" } }, [
+          _vm._v("Constant snow [2083]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Constant rain" } }, [
+          _vm._v("Constant rain [2114]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Constant dust" } }, [
+          _vm._v("Constant dust [2134]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "Seasonal Weather" } }, [
+          _vm._v("Seasonal Weather [3108]"),
+        ]),
+      ]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v("\n\n                        Terraintrait"),
+      _c("br"),
+      _vm._v(" "),
+      _c("select", { staticClass: "worldType" }, [
+        _c("option", { attrs: { value: "x" } }, [_vm._v("Any")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "noise" } }, [_vm._v("noise [2449]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "spikes" } }, [_vm._v("spikes [2481]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "canyon" } }, [_vm._v("canyon [2522]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "hills" } }, [_vm._v("hills [2559]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "flat" } }, [_vm._v("flat [2571]")]),
+      ]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v("\n\n                        Relics"),
+      _c("br"),
+      _vm._v(" "),
+      _c("select", { staticClass: "worldType" }, [
+        _c("option", { attrs: { value: "x" } }, [_vm._v("Any")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "top1" } }, [_vm._v("top1 [344]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "top2" } }, [_vm._v("top2 [347]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "windmill2" } }, [
+          _vm._v("windmill2 [355]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "top3" } }, [_vm._v("top3 [356]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "windmill1" } }, [
+          _vm._v("windmill1 [360]"),
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "tower" } }, [_vm._v("tower [400]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "None" } }, [_vm._v("None [10456]")]),
+      ]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v("\n\n                        Relicscount"),
+      _c("br"),
+      _vm._v(" "),
+      _c("select", { staticClass: "worldType" }, [
+        _c("option", { attrs: { value: "x" } }, [_vm._v("Any")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "2" } }, [_vm._v("2 [36]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "1" } }, [_vm._v("1 [2090]")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "0" } }, [_vm._v("0 [10456]")]),
+      ]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("button", { staticClass: "go" }, [_vm._v("Reset")]),
+    ])
   },
   function () {
     var _vm = this

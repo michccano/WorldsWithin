@@ -31,29 +31,29 @@
 
 
                         <div class="method">
-                            Sort: <select name="method">
-                            <option value="name">Serial</option>
+                            Sort: <select name="method" v-model="method_name" @change="methodChangeGetData">
+                            <option value="serial" selected>Serial</option>
                             <option value="price">Price</option>
                         </select>
                         </div>
 
-                        <select name="sort" id="sort">
-                            <option value="ASC">Asc</option>
-                            <option value="DSC">Dsc</option>
+                        <select name="sort" id="sort" v-model="sort" @change="methodChangeGetData">
+                            <option value="asc">Asc</option>
+                            <option value="desc">Dsc</option>
 
                         </select>
 
 
 
-                        <div class="check">For Sale Only: <input type="checkbox"></div>
+                        <div class="check">For Sale Only: <input type="checkbox" v-model="priceOnly" @change="methodChangeGetData"></div>
 
 
                         <div style="padding-bottom:20px">
                             Price Filter:<br>
-                            <input type="text" placeholder="min" id="lowprice" size="4">
-                            <input class="mt-2" type="text" placeholder="max" id="highprice" size="4">
+                            <input type="text" placeholder="min" id="lowprice" size="4" v-model="minPrice">
+                            <input class="mt-2" type="text" placeholder="max" id="highprice" size="4" v-model="maxPrice">
                             <br>
-                            <button class="go">Go</button>
+                            <button class="go" @click="methodChangeGetData">Go</button>
                         </div>
                         <div id="results">Results Found: 12582</div>
                         <hr>
@@ -513,11 +513,16 @@ export default {
             filters: [],
             project: "worldswithin",
             sort: "asc",
-            method_name: "rarity",
+            method_name: "serial",
             stats: [],
             worldsWithinData: [],
             pages: 1,
             page_number: 1,
+            priceOnly: false,
+            minPrice: "",
+            maxPrice: "",
+            minRank: "",
+            maxRank: ""
         }
     },
 
@@ -527,7 +532,7 @@ export default {
             sort: this.sort,
             method_name: this.method_name,
             page: this.page_number,
-            priceOnly: false,
+            priceOnly: this.priceOnly,
             filters: this.filters,
             minPrice: 0,
             maxPrice: 0,
@@ -551,7 +556,7 @@ export default {
                 sort: this.sort,
                 method_name: this.method_name,
                 page: this.page_number,
-                priceOnly: false,
+                priceOnly: this.priceOnly,
                 filters: this.filters,
                 minPrice: 0,
                 maxPrice: 0,
@@ -568,9 +573,30 @@ export default {
                 });
         },
 
-        pageChange() {
-            console.log(this.page_number)
-        }
+        methodChangeGetData() {
+            axios.post('/api/get-data', {
+                project: this.project,
+                sort: this.sort,
+                method_name: this.method_name,
+                page: 1,
+                priceOnly: this.priceOnly,
+                filters: this.filters,
+                minPrice: this.minPrice,
+                maxPrice: this.maxPrice,
+                minRank: 0,
+                maxRank: 0
+            })
+                .then((response) => {
+                    this.worldsWithinData = response.data.stats
+                    this.pages = response.data.params.maxPages
+                    this.page_number = 1
+                    console.log(response.data.params.maxPages)
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        },
+
     }
 }
 </script>
