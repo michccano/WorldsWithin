@@ -478,8 +478,15 @@
                         <div class="product_num">
                             #{{data.assetID}}
                             <div class="product_rate">
+                                <div v-if="data.price === 'x'">
+                                <button class="btn btn-secondary btn-sm ">Not For Sale</button>
+                                </div>
+                                <div v-else>
+                                    <button class="btn btn-info btn-sm ">{{data.price}}</button>
+                                </div>
                             </div>
                         </div>
+
 
                     </div>
                     </div>

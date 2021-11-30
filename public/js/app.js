@@ -2608,6 +2608,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'WorldsWithin',
@@ -38597,7 +38604,23 @@ var render = function () {
                           _vm._s(data.assetID) +
                           "\n                        "
                       ),
-                      _c("div", { staticClass: "product_rate" }),
+                      _c("div", { staticClass: "product_rate" }, [
+                        data.price === "x"
+                          ? _c("div", [
+                              _c(
+                                "button",
+                                { staticClass: "btn btn-secondary btn-sm " },
+                                [_vm._v("Not For Sale")]
+                              ),
+                            ])
+                          : _c("div", [
+                              _c(
+                                "button",
+                                { staticClass: "btn btn-info btn-sm " },
+                                [_vm._v(_vm._s(data.price))]
+                              ),
+                            ]),
+                      ]),
                     ]),
                   ]
                 ),
