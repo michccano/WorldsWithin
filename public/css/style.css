@@ -266,13 +266,13 @@ input{
     padding:0px 5px 0px 5px;
     display:block"
 }
-#mainImage{
+.mainImage{
     height:140px;
     width:140px;
     margin:auto;
     background:undefined"
 }
-#worldType{
+.worldType{
     font-size:0.8rem;
     width:140px;
     padding: 4px;

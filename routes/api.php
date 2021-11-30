@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TokenController;
+use App\Http\Controllers\WorldsWithinController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('register',[TokenController::class,'register']);
 Route::post('login',[TokenController::class,'login']);
+
+Route::post('get-data',[WorldsWithinController::class,'getData']);
