@@ -33,12 +33,17 @@ class WorldsWithinController extends Controller
         return response()->json($result);
     }
 
-    public function search_data(){
+    public function search_data($keyword){
         $client = new Client();
 
         $response= $client->request("GET","https://cnft.tools/search/worldswithin");
         $result = json_decode($response->getBody());
-        return response()->json($result);
+        $data = [];
+        foreach ($result->stats as $stat){
+            if(stripos($stat->assetName, $keyword) !== false)
+                array_push($data,$stat);
+        }
+        return response()->json($data);
     }
 
     public function getSingleData($assetId){

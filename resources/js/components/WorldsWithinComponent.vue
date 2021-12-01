@@ -365,8 +365,7 @@
                     <div class="sidebar">
                         <div class="first_side">
                             <div class="color-box">
-                                <h4>Worlds Within</h4>
-                                <h4>00001</h4>
+                                <h4>{{singleData.assetName}}</h4>
                             </div>
                             <div class="color-box">
                                 <p class="Score">Rarity Score: N/A</p>
@@ -386,30 +385,30 @@
                             <div class="color-box">
                                 <span>WorldType</span>
                                 <div class="d-flex justify-content-between">
-                                    <span class="clr_txt">Inner World</span>
+                                    <span class="clr_txt">{{singleData.worldType}}</span>
                                     <span class="txt_num"> 50.42%</span>
                                 </div>
                             </div>
                             <div class="color-box">
                                 <span>Fog</span>
                                 <div class="d-flex justify-content-between">
-                                    <span class="clr_txt">0.75</span>
+                                    <span class="clr_txt">{{singleData.fog}}</span>
                                     <span class="txt_num"> 10.32%</span>
                                 </div>
                             </div>
                             <div class="color-box">
                                 <span>Traits</span>
                                 <div class="d-flex justify-content-between">
-                                    <span class="clr_txt">Constant dust</span>
+                                    <span class="clr_txt">{{singleData.traits[0]}}</span>
                                     <span class="txt_num">16.95%</span>
                                 </div>
                                 <div class="d-flex justify-content-between">
-            <span class="clr_txt">pyramid_weird
+            <span class="clr_txt">{{singleData.traits[1]}}
             </span>
                                     <span class="txt_num">2.46%</span>
                                 </div>
                                 <div class="d-flex justify-content-between">
-            <span class="clr_txt">Type_D
+            <span class="clr_txt">{{singleData.traits[2]}}
 
               </span>
                                     <span class="txt_num">6.46%</span>
@@ -418,14 +417,14 @@
                             <div class="color-box">
                                 <span>TerrainTrait </span>
                                 <div class="d-flex justify-content-between">
-                                    <span class="clr_txt">canyon</span>
+                                    <span class="clr_txt">{{singleData.terrainTrait}}</span>
                                     <span class="txt_num"> 20.05%</span>
                                 </div>
                             </div>
                             <div class="color-box">
                                 <span>Relics  </span>
                                 <div class="d-flex justify-content-between">
-            <span class="clr_txt">None
+            <span class="clr_txt">{{singleData.relics}}
             </span>
                                     <span class="txt_num">  83.13%
             </span>
@@ -438,22 +437,6 @@
             </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <!-- end modal -->
 
             <div class="col-sm mobilemain" id="mobilemain">
@@ -461,7 +444,8 @@
 
                 <div class="grid" id="searchresult">
                     <div v-for="data in worldsWithinData">
-                        <div class="zoom showbox"  data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">
+                        <div class="zoom showbox"  @click="getSingleData(data.assetName)"
+                             data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">
                         <div class="rank">
                             Rank: N/A
 
@@ -482,7 +466,7 @@
                                 <button class="btn btn-secondary btn-sm ">Not For Sale</button>
                                 </div>
                                 <div v-else>
-                                    <button class="btn btn-info btn-sm ">{{data.price}}</button>
+                                    <button class="btn btn-info btn-sm ">{{data.price/1000000}} ADA</button>
                                 </div>
                             </div>
                         </div>
@@ -529,7 +513,15 @@ export default {
             minPrice: "",
             maxPrice: "",
             minRank: "",
-            maxRank: ""
+            maxRank: "",
+            singleData: {
+                assetName: "",
+                worldType: "",
+                fog: "",
+                traits:[],
+                terrainTrait:"",
+                relics:"",
+            }
         }
     },
 
@@ -549,7 +541,6 @@ export default {
             .then(( response ) => {
                 this.worldsWithinData = response.data.stats
                 this.pages = response.data.params.maxPages
-                console.log(response.data.params.maxPages)
             })
             .catch(error => {
                 console.log(error)
@@ -573,7 +564,6 @@ export default {
                 .then((response) => {
                     this.worldsWithinData = response.data.stats
                     this.pages = response.data.params.maxPages
-                    console.log(response.data.params.maxPages)
                 })
                 .catch(error => {
                     console.log(error)
@@ -597,12 +587,26 @@ export default {
                     this.worldsWithinData = response.data.stats
                     this.pages = response.data.params.maxPages
                     this.page_number = 1
-                    console.log(response.data.params.maxPages)
                 })
                 .catch(error => {
                     console.log(error)
                 });
         },
+        getSingleData(asset){
+            axios.post('/api/single-data/'+asset, {
+            })
+                .then((response) => {
+                    this.singleData.assetName = response.data.assetName
+                    this.singleData.worldType = response.data.worldType
+                    this.singleData.fog = response.data.fog
+                    this.singleData.traits = response.data.traits.traits
+                    this.singleData.terrainTrait = response.data.traits.terrainTrait
+                    this.singleData.relics = response.data.traits.relics[0]
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        }
 
     }
 }

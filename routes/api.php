@@ -24,6 +24,6 @@ Route::post('register',[TokenController::class,'register']);
 Route::post('login',[TokenController::class,'login']);
 
 Route::post('get-data',[WorldsWithinController::class,'getData']);
-Route::post('search',[WorldsWithinController::class,'search_data']);
+Route::post('search/{keyword}',[WorldsWithinController::class,'search_data']);
 Route::post('single-data/{assetId}',[WorldsWithinController::class,'getSingleData']);
 

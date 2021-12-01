@@ -2599,22 +2599,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'WorldsWithin',
@@ -2632,7 +2616,15 @@ __webpack_require__.r(__webpack_exports__);
       minPrice: "",
       maxPrice: "",
       minRank: "",
-      maxRank: ""
+      maxRank: "",
+      singleData: {
+        assetName: "",
+        worldType: "",
+        fog: "",
+        traits: [],
+        terrainTrait: "",
+        relics: ""
+      }
     };
   },
   mounted: function mounted() {
@@ -2652,7 +2644,6 @@ __webpack_require__.r(__webpack_exports__);
     }).then(function (response) {
       _this.worldsWithinData = response.data.stats;
       _this.pages = response.data.params.maxPages;
-      console.log(response.data.params.maxPages);
     })["catch"](function (error) {
       console.log(error);
     });
@@ -2675,7 +2666,6 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         _this2.worldsWithinData = response.data.stats;
         _this2.pages = response.data.params.maxPages;
-        console.log(response.data.params.maxPages);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2698,7 +2688,20 @@ __webpack_require__.r(__webpack_exports__);
         _this3.worldsWithinData = response.data.stats;
         _this3.pages = response.data.params.maxPages;
         _this3.page_number = 1;
-        console.log(response.data.params.maxPages);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    getSingleData: function getSingleData(asset) {
+      var _this4 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/single-data/' + asset, {}).then(function (response) {
+        _this4.singleData.assetName = response.data.assetName;
+        _this4.singleData.worldType = response.data.worldType;
+        _this4.singleData.fog = response.data.fog;
+        _this4.singleData.traits = response.data.traits.traits;
+        _this4.singleData.terrainTrait = response.data.traits.terrainTrait;
+        _this4.singleData.relics = response.data.traits.relics[0];
       })["catch"](function (error) {
         console.log(error);
       });
@@ -38569,7 +38572,126 @@ var render = function () {
         },
       }),
       _vm._v(" "),
-      _vm._m(5),
+      _c(
+        "div",
+        {
+          staticClass: "offcanvas offcanvas-end",
+          attrs: {
+            tabindex: "-1",
+            id: "offcanvasRight",
+            "aria-labelledby": "offcanvasRightLabel",
+          },
+        },
+        [
+          _vm._m(5),
+          _vm._v(" "),
+          _c("div", { staticClass: "offcanvas-body" }, [
+            _vm._m(6),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _vm._m(7),
+            _vm._v(" "),
+            _vm._m(8),
+            _vm._v(" "),
+            _c("div", { staticClass: "sidebar" }, [
+              _c("div", { staticClass: "first_side" }, [
+                _c("div", { staticClass: "color-box" }, [
+                  _c("h4", [_vm._v(_vm._s(_vm.singleData.assetName))]),
+                ]),
+                _vm._v(" "),
+                _vm._m(9),
+                _vm._v(" "),
+                _vm._m(10),
+                _vm._v(" "),
+                _vm._m(11),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "second_side" }, [
+                _c("div", { staticClass: "color-box" }, [
+                  _c("span", [_vm._v("WorldType")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "d-flex justify-content-between" }, [
+                    _c("span", { staticClass: "clr_txt" }, [
+                      _vm._v(_vm._s(_vm.singleData.worldType)),
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "txt_num" }, [_vm._v(" 50.42%")]),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "color-box" }, [
+                  _c("span", [_vm._v("Fog")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "d-flex justify-content-between" }, [
+                    _c("span", { staticClass: "clr_txt" }, [
+                      _vm._v(_vm._s(_vm.singleData.fog)),
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "txt_num" }, [_vm._v(" 10.32%")]),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "color-box" }, [
+                  _c("span", [_vm._v("Traits")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "d-flex justify-content-between" }, [
+                    _c("span", { staticClass: "clr_txt" }, [
+                      _vm._v(_vm._s(_vm.singleData.traits[0])),
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "txt_num" }, [_vm._v("16.95%")]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "d-flex justify-content-between" }, [
+                    _c("span", { staticClass: "clr_txt" }, [
+                      _vm._v(_vm._s(_vm.singleData.traits[1]) + "\n        "),
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "txt_num" }, [_vm._v("2.46%")]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "d-flex justify-content-between" }, [
+                    _c("span", { staticClass: "clr_txt" }, [
+                      _vm._v(
+                        _vm._s(_vm.singleData.traits[2]) + "\n\n          "
+                      ),
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "txt_num" }, [_vm._v("6.46%")]),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "color-box" }, [
+                  _c("span", [_vm._v("TerrainTrait ")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "d-flex justify-content-between" }, [
+                    _c("span", { staticClass: "clr_txt" }, [
+                      _vm._v(_vm._s(_vm.singleData.terrainTrait)),
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "txt_num" }, [_vm._v(" 20.05%")]),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "color-box" }, [
+                  _c("span", [_vm._v("Relics  ")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "d-flex justify-content-between" }, [
+                    _c("span", { staticClass: "clr_txt" }, [
+                      _vm._v(_vm._s(_vm.singleData.relics) + "\n        "),
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "txt_num" }, [
+                      _vm._v("  83.13%\n        "),
+                    ]),
+                  ]),
+                ]),
+              ]),
+            ]),
+          ]),
+        ]
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -38588,6 +38710,11 @@ var render = function () {
                       "data-bs-toggle": "offcanvas",
                       "data-bs-target": "#offcanvasRight",
                     },
+                    on: {
+                      click: function ($event) {
+                        return _vm.getSingleData(data.assetName)
+                      },
+                    },
                   },
                   [
                     _c("div", { staticClass: "rank" }, [
@@ -38596,7 +38723,7 @@ var render = function () {
                       ),
                     ]),
                     _vm._v(" "),
-                    _vm._m(6, true),
+                    _vm._m(12, true),
                     _vm._v(" "),
                     _c("div", { staticClass: "product_num" }, [
                       _vm._v(
@@ -38617,7 +38744,7 @@ var render = function () {
                               _c(
                                 "button",
                                 { staticClass: "btn btn-info btn-sm " },
-                                [_vm._v(_vm._s(data.price))]
+                                [_vm._v(_vm._s(data.price / 1000000) + " ADA")]
                               ),
                             ]),
                       ]),
@@ -38963,172 +39090,89 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "offcanvas offcanvas-end",
+    return _c("div", { staticClass: "offcanvas-header" }, [
+      _c("button", {
+        staticClass: "btn-close text-reset",
         attrs: {
-          tabindex: "-1",
-          id: "offcanvasRight",
-          "aria-labelledby": "offcanvasRightLabel",
+          type: "button",
+          "data-bs-dismiss": "offcanvas",
+          "aria-label": "Close",
         },
-      },
-      [
-        _c("div", { staticClass: "offcanvas-header" }, [
-          _c("button", {
-            staticClass: "btn-close text-reset",
-            attrs: {
-              type: "button",
-              "data-bs-dismiss": "offcanvas",
-              "aria-label": "Close",
-            },
-          }),
+      }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modals_head" }, [
+      _c("h1", [_vm._v("World Within")]),
+      _vm._v(" "),
+      _c("a", { attrs: { href: "" } }, [
+        _vm._v("Powered By the CDINO Stakepool."),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "color-box" }, [
+      _c("div", { staticClass: "color_txt" }, [
+        _c("span", [
+          _vm._v("https://cnft.tools/worldswithin/1"),
+          _c("i", { staticClass: "far fa-clipboard ms-2 icn" }),
+          _vm._v(" "),
+          _c("i", { staticClass: "fab fa-twitter ms-2 icn" }),
         ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "offcanvas-body" }, [
-          _c("div", { staticClass: "modals_head" }, [
-            _c("h1", [_vm._v("World Within")]),
-            _vm._v(" "),
-            _c("a", { attrs: { href: "" } }, [
-              _vm._v("Powered By the CDINO Stakepool."),
-            ]),
-          ]),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "color-box" }, [
+      _c("div", { staticClass: "disclaimer" }, [
+        _c("span", [
+          _vm._v("Disclaimer: "),
+          _c("br"),
+          _vm._v(
+            "\n      CNFT Tools rarity rankings are just one tool to help you value NFTs. We are using the more accepted rarity calculation with the addition of category normalisation. No mathematical model can be perfect but we believe this to be the most fair currently. "
+          ),
+          _c("br"),
           _vm._v(" "),
-          _c("hr"),
-          _vm._v(" "),
-          _c("div", { staticClass: "color-box" }, [
-            _c("div", { staticClass: "color_txt" }, [
-              _c("span", [
-                _vm._v("https://cnft.tools/worldswithin/1"),
-                _c("i", { staticClass: "far fa-clipboard ms-2 icn" }),
-                _vm._v(" "),
-                _c("i", { staticClass: "fab fa-twitter ms-2 icn" }),
-              ]),
-            ]),
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "color-box" }, [
-            _c("div", { staticClass: "disclaimer" }, [
-              _c("span", [
-                _vm._v("Disclaimer: "),
-                _c("br"),
-                _vm._v(
-                  "\n      CNFT Tools rarity rankings are just one tool to help you value NFTs. We are using the more accepted rarity calculation with the addition of category normalisation. No mathematical model can be perfect but we believe this to be the most fair currently. "
-                ),
-                _c("br"),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(
-                  "\n\n      Rarity Rankings are calculated from what has been minted on chain. They are subject to change as more NFT's are minted."
-                ),
-              ]),
-            ]),
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "sidebar" }, [
-            _c("div", { staticClass: "first_side" }, [
-              _c("div", { staticClass: "color-box" }, [
-                _c("h4", [_vm._v("Worlds Within")]),
-                _vm._v(" "),
-                _c("h4", [_vm._v("00001")]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "color-box" }, [
-                _c("p", { staticClass: "Score" }, [
-                  _vm._v("Rarity Score: N/A"),
-                ]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "color-box" }, [
-                _c("img", { attrs: { src: "img/1.png", alt: "" } }),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "color-box" }, [
-                _c("p", { staticClass: "Score" }, [
-                  _vm._v("Rarity Score: N/A"),
-                ]),
-              ]),
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "second_side" }, [
-              _c("div", { staticClass: "color-box" }, [
-                _c("span", [_vm._v("WorldType")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "d-flex justify-content-between" }, [
-                  _c("span", { staticClass: "clr_txt" }, [
-                    _vm._v("Inner World"),
-                  ]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "txt_num" }, [_vm._v(" 50.42%")]),
-                ]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "color-box" }, [
-                _c("span", [_vm._v("Fog")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "d-flex justify-content-between" }, [
-                  _c("span", { staticClass: "clr_txt" }, [_vm._v("0.75")]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "txt_num" }, [_vm._v(" 10.32%")]),
-                ]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "color-box" }, [
-                _c("span", [_vm._v("Traits")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "d-flex justify-content-between" }, [
-                  _c("span", { staticClass: "clr_txt" }, [
-                    _vm._v("Constant dust"),
-                  ]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "txt_num" }, [_vm._v("16.95%")]),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "d-flex justify-content-between" }, [
-                  _c("span", { staticClass: "clr_txt" }, [
-                    _vm._v("pyramid_weird\n        "),
-                  ]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "txt_num" }, [_vm._v("2.46%")]),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "d-flex justify-content-between" }, [
-                  _c("span", { staticClass: "clr_txt" }, [
-                    _vm._v("Type_D\n\n          "),
-                  ]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "txt_num" }, [_vm._v("6.46%")]),
-                ]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "color-box" }, [
-                _c("span", [_vm._v("TerrainTrait ")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "d-flex justify-content-between" }, [
-                  _c("span", { staticClass: "clr_txt" }, [_vm._v("canyon")]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "txt_num" }, [_vm._v(" 20.05%")]),
-                ]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "color-box" }, [
-                _c("span", [_vm._v("Relics  ")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "d-flex justify-content-between" }, [
-                  _c("span", { staticClass: "clr_txt" }, [
-                    _vm._v("None\n        "),
-                  ]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "txt_num" }, [
-                    _vm._v("  83.13%\n        "),
-                  ]),
-                ]),
-              ]),
-            ]),
-          ]),
+          _c("br"),
+          _vm._v(
+            "\n\n      Rarity Rankings are calculated from what has been minted on chain. They are subject to change as more NFT's are minted."
+          ),
         ]),
-      ]
-    )
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "color-box" }, [
+      _c("p", { staticClass: "Score" }, [_vm._v("Rarity Score: N/A")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "color-box" }, [
+      _c("img", { attrs: { src: "img/1.png", alt: "" } }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "color-box" }, [
+      _c("p", { staticClass: "Score" }, [_vm._v("Rarity Score: N/A")]),
+    ])
   },
   function () {
     var _vm = this
