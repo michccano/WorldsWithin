@@ -43,7 +43,7 @@ class WorldsWithinController extends Controller
             if(stripos($stat->assetName, $keyword) !== false)
                 array_push($data,$stat);
         }
-        return response()->json($data);
+        return response()->json(array_slice($data, 0, 5, true));
     }
 
     public function getSingleData($assetId){

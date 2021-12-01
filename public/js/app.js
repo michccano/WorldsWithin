@@ -2599,6 +2599,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'WorldsWithin',
@@ -2624,6 +2628,11 @@ __webpack_require__.r(__webpack_exports__);
         traits: [],
         terrainTrait: "",
         relics: ""
+      },
+      search: {
+        key: "",
+        arr: [],
+        arrLength: 0
       }
     };
   },
@@ -2702,6 +2711,17 @@ __webpack_require__.r(__webpack_exports__);
         _this4.singleData.traits = response.data.traits.traits;
         _this4.singleData.terrainTrait = response.data.traits.terrainTrait;
         _this4.singleData.relics = response.data.traits.relics[0];
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    searchData: function searchData() {
+      var _this5 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/search/' + this.search.key, {}).then(function (response) {
+        _this5.search.arrLength = response.data.length;
+        _this5.search.arr = response.data;
+        console.log(_this5.search.arr);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -38332,18 +38352,63 @@ var render = function () {
               _vm._v(" "),
               _c("div", { staticClass: "search" }, [
                 _c("span", { staticClass: "src_txt" }, [
-                  _vm._v("\n    Search By Serial:\n"),
+                  _vm._v(
+                    "\n                        Search By Serial:\n                     "
+                  ),
                 ]),
                 _vm._v(" "),
                 _c("br"),
                 _vm._v(" "),
                 _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.search.key,
+                      expression: "search.key",
+                    },
+                  ],
                   attrs: { type: "text", placeholder: "search", size: "10" },
+                  domProps: { value: _vm.search.key },
+                  on: {
+                    change: _vm.searchData,
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.search, "key", $event.target.value)
+                    },
+                  },
                 }),
                 _vm._v(" "),
                 _c("br"),
                 _vm._v(" "),
-                _c("button", { staticClass: "go" }, [_vm._v("Go")]),
+                _vm.search.arrLength !== 0
+                  ? _c("div", [
+                      _c("h5", { staticStyle: { color: "gray" } }, [
+                        _vm._v("Result"),
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "p",
+                        {
+                          staticStyle: { cursor: "pointer", color: "blue" },
+                          attrs: {
+                            "data-bs-toggle": "offcanvas",
+                            "data-bs-target": "#offcanvasRight",
+                          },
+                          on: {
+                            click: function ($event) {
+                              return _vm.getSingleData("WorldsWithin00001")
+                            },
+                          },
+                        },
+                        [_vm._v("WorldWithin00001")]
+                      ),
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("br"),
                 _vm._v(" "),
                 _c("div", { staticClass: "method" }, [
                   _vm._v("\n                        Sort: "),

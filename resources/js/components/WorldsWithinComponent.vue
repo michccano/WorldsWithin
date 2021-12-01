@@ -22,14 +22,18 @@
 
 
                     <div class="search">
-    <span class="src_txt">
-        Search By Serial:
-    </span> <br>
-                        <input type="text" placeholder="search" size="10"> <br>
-                        <button class="go">Go</button>
+                         <span class="src_txt">
+                            Search By Serial:
+                         </span> <br>
+                        <input type="text" placeholder="search" v-model="search.key" size="10" @change="searchData"> <br>
 
+                        <div v-if="search.arrLength !== 0">
+                        <h5 style="color: gray">Result</h5>
+                        <p style="cursor: pointer;color: blue" @click="getSingleData('WorldsWithin00001')"
+                           data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">WorldWithin00001</p>
+                        </div>
 
-
+                        <br>
                         <div class="method">
                             Sort: <select name="method" v-model="method_name" @change="methodChangeGetData">
                             <option value="serial" selected>Serial</option>
@@ -521,6 +525,11 @@ export default {
                 traits:[],
                 terrainTrait:"",
                 relics:"",
+            },
+            search: {
+                key: "",
+                arr: [],
+                arrLength: 0,
             }
         }
     },
@@ -592,6 +601,7 @@ export default {
                     console.log(error)
                 });
         },
+
         getSingleData(asset){
             axios.post('/api/single-data/'+asset, {
             })
@@ -602,6 +612,19 @@ export default {
                     this.singleData.traits = response.data.traits.traits
                     this.singleData.terrainTrait = response.data.traits.terrainTrait
                     this.singleData.relics = response.data.traits.relics[0]
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        },
+
+        searchData(){
+            axios.post('/api/search/'+this.search.key, {
+            })
+                .then((response) => {
+                    this.search.arrLength = response.data.length
+                    this.search.arr = response.data
+                    console.log(this.search.arr)
                 })
                 .catch(error => {
                     console.log(error)
